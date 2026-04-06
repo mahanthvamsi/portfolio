@@ -29,7 +29,7 @@ function QuoteCard({ tooltipRef }: { tooltipRef: TooltipRef }) {
         className="text-[12px] leading-relaxed italic text-neutral-300"
         style={{ borderLeft: `2px solid ${tooltipRef.accentColor}40`, paddingLeft: "10px" }}
       >
-        "{tooltipRef.quote}"
+        &quot;{tooltipRef.quote}&quot;
       </p>
 
       {/* Divider */}
@@ -250,7 +250,7 @@ function PillarCard({
                     className="text-[12px] font-mono italic mb-3 leading-relaxed"
                     style={{ color: `rgba(${pillar.accentRgb}, 0.75)` }}
                   >
-                    "{pillar.quote}"
+                    &quot;{pillar.quote}&quot;
                   </p>
 
                   <div
