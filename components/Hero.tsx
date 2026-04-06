@@ -106,7 +106,7 @@ const Hero = () => {
                 textTransform: 'uppercase',
               }}
             >
-              SOFTWARE ENGINEER
+              CS GRADUATE STUDENT
             </motion.h2>
 
             {/* Professional Description */}
@@ -116,10 +116,11 @@ const Hero = () => {
               transition={{ duration: 0.6, delay: 0.35 }}
               className='text-center text-white/80 text-base md:text-lg lg:text-xl max-w-3xl leading-relaxed font-light mb-12'
             >
-              Specializing in <span className='text-purple font-medium'>React</span>,{' '}
-              <span className='text-purple font-medium'>Next.js</span>, and{' '}
-              <span className='text-purple font-medium'>TypeScript</span> to build scalable web applications.
-              Passionate about creating intuitive user experiences and robust backend solutions.
+              M.Sc. Computer Science at{' '}
+              <span className='text-purple font-medium'>University College Dublin</span>  previously shipped production UI at{' '}
+              <span className='text-purple font-medium'>CFT Ventures</span>, built full-stack systems at{' '}
+              <span className='text-purple font-medium'>BHEL</span>, and published{' '}
+              <span className='text-purple font-medium'>ML research</span> at IEEE.
             </motion.p>
 
             {/* Social Links */}

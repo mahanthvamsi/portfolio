@@ -28,7 +28,7 @@ const SKILL_CATS = ["All", "Languages", "Frontend", "Backend", "Cloud"] as const
 const APPS = {
   bio:    { id: "bio",    title: "About_Me.txt",  icon: "📝", defaultPos: { x: 24,  y: 48  } },
   skills: { id: "skills", title: "Tech_Stack",    icon: "💻", defaultPos: { x: 390, y: 48  } },
-  edu:    { id: "edu",    title: "Education.md",  icon: "🎓", defaultPos: { x: 140, y: 230 } },
+  edu:    { id: "edu",    title: "Education.md",  icon: "🎓", defaultPos: { x: 24,  y: 48  } },
 };
 
 type AppId = keyof typeof APPS;
@@ -52,7 +52,7 @@ export default function Grid() {
   const desktopRef = useRef<HTMLDivElement>(null);
 
   const [openApps, setOpenApps] = useState<Record<string, boolean>>(
-    { bio: true, skills: true, edu: false }
+    { bio: true, skills: true, edu: true }
   );
   const [winState, setWinState] = useState<Record<string, WinState>>(
     { bio: "normal", skills: "normal", edu: "normal" }
@@ -128,13 +128,16 @@ export default function Grid() {
         />
 
         {/* Menu bar */}
-        <div className="absolute top-0 inset-x-0 h-7 bg-black/40 backdrop-blur-md border-b border-white/[0.06] flex items-center px-4 gap-5 z-50">
-          <span className="text-white/90 font-bold text-xs">⬡ mahanthvamsi</span>
-          <span className="text-white/40 text-xs">File</span>
-          <span className="text-white/40 text-xs">Edit</span>
-          <span className="text-white/40 text-xs">View</span>
-          <div className="ml-auto flex items-center gap-3 text-white/50 text-xs">
-            <span>🔋 54%</span>
+        <div className="absolute top-0 inset-x-0 h-7 bg-black/40 backdrop-blur-md border-b border-white/[0.06] flex items-center px-3 z-50">
+          <span className="text-white/90 font-bold text-xs whitespace-nowrap">⬡ mahanthvamsi</span>
+          <div className="hidden sm:flex items-center gap-4 ml-4">
+            <span className="text-white/40 text-xs">File</span>
+            <span className="text-white/40 text-xs">Edit</span>
+            <span className="text-white/40 text-xs">View</span>
+          </div>
+          <div className="ml-auto flex items-center gap-2 text-white/50 text-xs">
+            <span className="hidden sm:inline">🔋</span>
+            <span className="text-white/50 text-xs">54%</span>
             <span>🛜</span>
             <Clock />
           </div>
@@ -180,6 +183,7 @@ export default function Grid() {
               onClose={() => closeApp("edu")}
               onMinimize={() => toggleWinState("edu", "minimized")}
               onMaximize={() => toggleWinState("edu", "maximized")}
+              anchor="right"
             >
               <EduContent />
             </AppWindow>
@@ -220,7 +224,7 @@ export default function Grid() {
 
 // ── Window Shell ─────────────────────────────────────────────────────────────
 function AppWindow({
-  app, z, desktopRef, winState, onFocus, onClose, onMinimize, onMaximize, children,
+  app, z, desktopRef, winState, onFocus, onClose, onMinimize, onMaximize, anchor, children,
 }: {
   app: typeof APPS[AppId];
   z: number;
@@ -230,6 +234,7 @@ function AppWindow({
   onClose: () => void;
   onMinimize: () => void;
   onMaximize: () => void;
+  anchor?: "left" | "right";
   children: React.ReactNode;
 }) {
   const isMax = winState === "maximized";
@@ -257,10 +262,10 @@ function AppWindow({
       style={{
         zIndex: z,
         position: "absolute",
-        left: isMax ? 0 : app.defaultPos.x,
+        ...(isMax ? { left: 0 } : anchor === "right" ? { right: app.defaultPos.x } : { left: app.defaultPos.x }),
         top:  isMax ? 28 : app.defaultPos.y + 28,
         width: isMax ? "100%" : undefined,
-        height: isMax ? "calc(100% - 68px)" : undefined,
+        height: isMax ? "calc(100% - 68px)" : 420,
         borderRadius: isMax ? 0 : undefined,
         ...maxStyle,
       }}
@@ -315,11 +320,9 @@ function AppWindow({
 
       {/* Content */}
       <div
-        className="flex-1 overflow-hidden"
+        className="flex-1 overflow-hidden flex flex-col"
         style={{
-          maxHeight: isMax ? "100%" : 380,
           background: "rgba(12,14,35,0.98)",
-          height: isMax ? "100%" : undefined,
         }}
       >
         {children}
@@ -332,8 +335,7 @@ function AppWindow({
 function BioContent() {
   return (
     <div
-      className="h-full overflow-y-auto"
-      style={{ maxHeight: "inherit" }}
+      className="flex-1 overflow-y-auto min-h-0"
     >
       {/* Text editor toolbar */}
       <div className="flex items-center gap-3 px-4 py-1.5 border-b border-white/[0.05] bg-black/20">
@@ -415,7 +417,7 @@ function SkillsContent() {
     : skills.filter(s => s.cat === activecat);
 
   return (
-    <div className="h-full flex overflow-hidden" style={{ maxHeight: "inherit" }}>
+    <div className="flex-1 flex overflow-hidden min-h-0">
       {/* Sidebar */}
       <div className="w-28 flex-shrink-0 border-r border-white/[0.06] bg-black/20 flex flex-col gap-0.5 p-2 pt-3">
         <p className="text-[9px] text-white/20 uppercase tracking-widest px-2 mb-1 font-mono">Filter</p>
@@ -477,7 +479,7 @@ function SkillsContent() {
 // ── Education Content ────────────────────────────────────────────────────────
 function EduContent() {
   return (
-    <div className="p-5 flex flex-col gap-4 overflow-y-auto h-full">
+    <div className="p-5 flex flex-col gap-4 overflow-y-auto flex-1 min-h-0">
       <div className="rounded-xl overflow-hidden border border-white/[0.08]">
         <div
           className="px-4 py-3 flex items-center gap-3"
